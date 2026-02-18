@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Friends Of Planet Uganda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background: #2E7D32;
+      color: white;
+      padding: 5px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(46, 125, 50, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-area img:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-area h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 20px;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    nav a.active {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Image Slider Styles */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .slider-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .slide-content h3 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+    }
+
+    .slide-content p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .slider-controls {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .slider-btn {
+      background: rgba(255,255,255,0.9);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #2E7D32;
+      transition: all 0.3s ease;
+      pointer-events: all;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .slider-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .slider-indicators {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+    }
+
+    .indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .indicator.active {
+      background: white;
+      transform: scale(1.2);
+    }
+
+    .hero {
+      background: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+      background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url("forest.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(46,125,50,0.8), rgba(76,175,80,0.6));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero button {
+      padding: 12px 25px;
+      background: white;
+      color: #2E7D32;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .hero button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .services {
+      display: flex;
+      justify-content: space-around;
+      padding: 40px;
+      background: #F5F5F5;
+      text-align: center;
+    }
+
+    .services div {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 20%;
+      transition: all 0.3s ease;
+    }
+
+    .services div:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .progress {
+      background: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .recycle {
+      background: #4CAF50;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    /* Professional Gallery Styling */
+    .gallery {
+      padding: 40px 20px;
+      background: #f8f9fa;
+      text-align: center;
+    }
+
+    .gallery-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transition: all 0.4s ease;
+      background: white;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-caption {
+      padding: 15px;
+      background: white;
+      text-align: center;
+      font-weight: 600;
+      color: #2E7D32;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(46,125,50,0.9), transparent);
+      color: white;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-caption {
+      transform: translateY(0);
+    }
+
+    /* Professional Recycle Image */
+    .recycle-img-container {
+      max-width: 600px;
+      margin: 30px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .recycle-img-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .recycle-img-container:hover img {
+      transform: scale(1.05);
+    }
+
+    .row-section {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      padding: 30px 15px;
+    }
+
+    .row-box {
+      width: 30%;
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .row-box:hover {
+      background: #2E7D32;
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    }
+
+    .contact {
+      background: #E8F5E9;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .contact input, .contact textarea {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .contact button {
+      background: #2E7D32;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .contact button:hover {
+      background: #1B5E20;
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .whatsapp-button:hover {
+      background: #1ebe5d;
+      transform: translateY(-2px);
+    }
+
+    footer {
+      background: #1B5E20;
+      color: white;
+      text-align: center;
+      padding: 15px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+      
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: #2E7D32;
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 15px;
+        transition: right 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        z-index: 1000;
+      }
+      
+      .nav-menu.active {
+        right: 0;
+      }
+      
+      .nav-menu a {
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 16px;
+      }
+      
+      .logo-area h3 {
+        font-size: 16px;
+      }
+
+      .logo-area img {
+        height: 40px;
+      }
+
+      /* Slider Mobile Styles */
+      .slide img {
+        height: 250px;
+      }
+
+      .slide-content {
+        padding: 20px;
+      }
+
+      .slide-content h3 {
+        font-size: 18px;
+      }
+
+      .slide-content p {
+        font-size: 14px;
+      }
+
+      .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+      }
+
+      .services {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .services div {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .row-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .row-box {
+        width: 80%;
+        margin-bottom: 20px;
+      }
+
+      .gallery-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 10px;
+      }
+      
+      .gallery img {
+        height: 200px;
+      }
+      
+      .recycle-img-container {
+        margin: 20px;
+      }
+    }
+
+    /* Tablet Styles */
+    @media (max-width: 1024px) and (min-width: 769px) {
+      .nav-menu {
+        gap: 15px;
+        padding: 6px 15px;
+      }
+      
+      .nav-menu a {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+      
+      .logo-area h3 {
+        font-size: 18px;
+      }
+
+      .slide img {
+        height: 300px;
+      }
+    }
+
+    /* Small Mobile Styles */
+    @media (max-width: 480px) {
+      .logo-area img {
+        height: 35px;
+      }
+      
+      .logo-area h3 {
+        font-size: 14px;
+      }
+      
+      .nav-menu {
+        width: 90%;
+        max-width: 250px;
+      }
+
+      .hero {
+        padding: 60px 15px;
+      }
+
+      .services, .progress, .recycle, .gallery, .contact {
+        padding: 20px 15px;
+      }
+
+      .gallery-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .gallery img {
+        height: 180px;
+      }
+
+      .slide img {
+        height: 200px;
+      }
+
+      .slider-controls {
+        padding: 0 10px;
+      }
+
+      .slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<a href="https://wa.me/256775991480?text=Hello,%20Welcome%20to%20Friends%20Of%20Planet%20Uganda" class="whatsapp-button" target="_blank">
+  <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+</a>
+
+<header id="header">
+  <div class="header-content">
+    <div class="logo-area">
+      <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\download.png" alt="Friends Of Planet Uganda Logo">
+      <h3>Friends Of Planet Uganda</h3>
+    </div>
+    <nav class="nav-menu" id="nav-menu">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="projects.html">Projects</a>
+      <a href="#">Create Account</a>
+      <a href="#">Login</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Image Slider Section -->
+<section class="slider-section" style="padding: 20px; background: #f5f5f5;">
+  <div class="slider-container">
+    <div class="slider-wrapper" id="sliderWrapper">
+      <div class="slide">
+        <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo3.jpg.jpeg" alt="Tree Planting Activity">
+        <div class="slide-content">
+          <h3>Tree Planting Campaign</h3>
+          <p>Join us in our mission to plant thousands of trees across Uganda</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo7.jpg.jpeg" alt="Community Cleanup">
+        <div class="slide-content">
+          <h3>Community Cleanup</h3>
+          <p>Working together to keep our communities clean and green</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo6.jpg.jpeg" alt="Environmental Education">
+        <div class="slide-content">
+          <h3>Environmental Education</h3>
+          <p>Educating the next generation on environmental sustainability</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slider-controls">
+      <button class="slider-btn" id="prevBtn" aria-label="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="slider-btn" id="nextBtn" aria-label="Next slide">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    
+    <div class="slider-indicators">
+      <span class="indicator active" data-slide="0"></span>
+      <span class="indicator" data-slide="1"></span>
+      <span class="indicator" data-slide="2"></span>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+  <div class="hero-content">
+    <h2>Protecting Nature for Future Generations</h2>
+    <h2>About FOP-Uganda</h2>
+    <p>Friends Of Planet Uganda is an accidental environmental sustainability initiative based on patriotism. We have immersed ourselves in practices of sustaining the environment, such as research, sensitization,tree planting, waste management, emissions control, and urban farming.</p>
+    <p> We are committed to continuing to engage in such practices, and we believe they can help mitigate the climate change effects, hence creating a clean and green environment for us all.</p>
+    <p>
+      Promoting environmental sustainability, forest preservation,
+      and waste management solutions.
+    </p>
+    <button>Get Involved</button>
+  </div>
+</section>
+
+<section class="services">
+  <div>🌳 <br> Tree planting campaign</div>
+  <div>♻️ <br> Waste Management solutions</div>
+  <div>🌍 <br> Sustainability Education</div>
+  <div>🌍<br> Creating communities clean-up events</div>
+</section>
+
+<section class="progress">
+  <h2>Our Mission</h2>
+  <p>To inspire and empower communities to protect and restore the natural environment through sensitization and hands on conservation efforts for the next generation to inherit a cleaner, greener and eco-friendly planet. </p>
+  <h2>Our Vision</h2>
+  <p>To be a continent leader in environment restoration and climate resilience for cleaner air, water and green planet.</p>
+</section>
+
+<section class="recycle">
+  <h2>Learn How to Recycle Properly</h2>
+  <p>
+    Recycling remains an effective and important way to reduce waste
+    and protect our environment.
+  </p>
+  <div class="recycle-img-container">
+    <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\recycle.jpg.jpeg" alt="Recycling Process">
+  </div>
+</section>
+
+<section class="gallery">
+  <h2>Our Activities</h2>
+  <p>PRACTICES FOR A SUSTAINABLE FUTURE</p>
+  <div class="gallery-container">
+    <div class="gallery-item">
+      <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo3.jpg.jpeg" alt="Tree Planting Activity">
+      <div class="gallery-caption">Tree Planting Campaign</div>
+    </div>
+    <div class="gallery-item">
+      <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo7.jpg.jpeg" alt="Community Cleanup">
+      <div class="gallery-caption">Community Cleanup</div>
+    </div>
+    <div class="gallery-item">
+      <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\photo6.jpg.jpeg" alt="Environmental Education">
+      <div class="gallery-caption">Environmental Education</div>
+    </div>
+  </div>
+</section>
+
+<section class="row-section">
+  <div class="row-box">
+    <h3>Forest Preservation</h3>
+    <p>Tree planting and forest protection programs.</p>
+  </div>
+
+  <div class="row-box">
+    <h3>Waste Management</h3>
+    <p>Recycling and waste reduction initiatives.</p>
+  </div>
+
+  <div class="row-box">
+    <h3>Sustainability Education</h3>
+    <p>Environmental awareness and training.</p>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact">
+  <h2>Contact Us</h2>
+  <p> 📞  +256775991480</p>
+  <p> 📞  +256757161754</p>
+  <p> 📞  +256200900531</p>
+  
+  <p>
+    📧 Email:
+    <a href="mailto:fopuganda0@gmail.com">fopuganda0@gmail.com</a>
+  </p>
+
+  <p>Please reach out to us by filling the form below, or contact us via email, phone whatsapp. we'll respond as soon as possible.</p>
+  
+  <!-- Contact Form (Frontend only for now) -->
+  <form>
+    <input type="text" placeholder="Your Name" required><br>
+    <input type="email" placeholder="Your Email" required><br>
+    <textarea rows="4" placeholder="Your Message"></textarea><br>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<footer>
+  <p>© 2025 FOP-Uganda | Together for a Greener World | Privacy Policy</p>
+</footer>
+
+<script>
+  // Sticky Header with Scroll Effect
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // Enhanced Navigation Menu
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+  
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  
+  // Close menu when clicking on a link
+  document.querySelectorAll('.nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+
+  // Image Slider Functionality
+  class ImageSlider {
+    constructor() {
+      this.currentSlide = 0;
+      this.slides = document.querySelectorAll('.slide');
+      this.totalSlides = this.slides.length;
+      this.sliderWrapper = document.getElementById('sliderWrapper');
+      this.prevBtn = document.getElementById('prevBtn');
+      this.nextBtn = document.getElementById('nextBtn');
+      this.indicators = document.querySelectorAll('.indicator');
+      this.autoPlayInterval = null;
+      
+      this.init();
+    }
+
+    init() {
+      this.updateSlider();
+      this.attachEventListeners();
+      this.startAutoPlay();
+    }
+
+    attachEventListeners() {
+      this.prevBtn.addEventListener('click', () => this.prevSlide());
+      this.nextBtn.addEventListener('click', () => this.nextSlide());
+      
+      this.indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goToSlide(index));
+      });
+
+      // Pause auto-play on hover
+      this.sliderWrapper.addEventListener('mouseenter', () => this.stopAutoPlay());
+      this.sliderWrapper.addEventListener('mouseleave', () => this.startAutoPlay());
+
+      // Touch support for mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      this.sliderWrapper.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      this.sliderWrapper.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        this.handleSwipe(touchStartX, touchEndX);
+      });
+    }
+
+    handleSwipe(startX, endX) {
+      const swipeThreshold = 50;
+      const diff = startX - endX;
+
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          this.nextSlide();
+        } else {
+          this.prevSlide();
+        }
+      }
+    }
+
+    updateSlider() {
+      this.sliderWrapper.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+      
+      // Update indicators
+      this.indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === this.currentSlide);
+      });
+    }
+
+    nextSlide() {
+      this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+      this.updateSlider();
+    }
+
+    prevSlide() {
+      this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+      this.updateSlider();
+    }
+
+    goToSlide(index) {
+      this.currentSlide = index;
+      this.updateSlider();
+    }
+
+    startAutoPlay() {
+      this.autoPlayInterval = setInterval(() => this.nextSlide(), 5000);
+    }
+
+    stopAutoPlay() {
+      if (this.autoPlayInterval) {
+        clearInterval(this.autoPlayInterval);
+        this.autoPlayInterval = null;
+      }
+    }
+  }
+
+  // Initialize slider when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new ImageSlider();
+  });
+</script>
+
+</body>
+</html>

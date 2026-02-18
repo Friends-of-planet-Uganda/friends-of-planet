@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Projects - Friends Of Planet Uganda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+    }
+
+    header {
+      background: #2E7D32;
+      color: white;
+      padding: 5px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(46, 125, 50, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo-area img {
+      height: 50px;
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-area img:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-area h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: white;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 20px;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    nav a.active {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #2E7D32, #4CAF50);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(46,125,50,0.8), rgba(76,175,80,0.6));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .projects-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .project {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border-left: 5px solid #2E7D32;
+    }
+
+    .project:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    }
+
+    .project h3 {
+      color: #2E7D32;
+      font-size: 28px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+
+    .project h {
+      color: #4CAF50;
+      font-size: 20px;
+      margin: 25px 0 10px 0;
+      font-weight: bold;
+      display: block;
+    }
+
+    .project p {
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: #2E7D32;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      margin: 20px;
+    }
+
+    .back-button:hover {
+      background: #1B5E20;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(46,125,50,0.3);
+    }
+
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+
+    .whatsapp-button:hover {
+      background: #1ebe5d;
+    }
+
+    footer {
+      background: #1B5E20;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+      
+      .nav-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: auto;
+        background: #2E7D32;
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+        display: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 0 0 12px 12px;
+        min-width: 200px;
+      }
+      
+      .nav-menu.active {
+        display: flex;
+      }
+      
+      .nav-menu a {
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+      
+      .logo-area h3 {
+        font-size: 16px;
+      }
+
+      .logo-area img {
+        height: 40px;
+      }
+
+      .hero {
+        padding: 40px 15px;
+      }
+
+      .projects-container {
+        padding: 20px 15px;
+      }
+
+      .project {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .project h3 {
+        font-size: 24px;
+      }
+
+      .project h {
+        font-size: 18px;
+      }
+
+      .project p {
+        font-size: 14px;
+      }
+    }
+
+    /* Tablet Styles */
+    @media (max-width: 1024px) and (min-width: 769px) {
+      .nav-menu {
+        gap: 15px;
+        padding: 6px 15px;
+      }
+      
+      .nav-menu a {
+        font-size: 14px;
+        padding: 6px 12px;
+      }
+      
+      .logo-area h3 {
+        font-size: 18px;
+      }
+
+      .projects-container {
+        padding: 30px 20px;
+      }
+    }
+
+    /* Small Mobile Styles */
+    @media (max-width: 480px) {
+      .logo-area img {
+        height: 35px;
+      }
+      
+      .logo-area h3 {
+        font-size: 14px;
+      }
+      
+      .nav-menu {
+        padding: 15px;
+      }
+
+      .hero {
+        padding: 30px 15px;
+      }
+
+      .project {
+        padding: 15px;
+      }
+
+      .project h3 {
+        font-size: 20px;
+      }
+
+      .project h {
+        font-size: 16px;
+      }
+
+      .back-button {
+        margin: 15px;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<a href="https://wa.me/256775991480?text=Hello,%20Welcome%20to%20Friends%20Of%20Planet%20Uganda" class="whatsapp-button" target="_blank">
+  💬 Chat on WhatsApp
+</a>
+
+<header id="header">
+  <div class="header-content">
+    <div class="logo-area">
+      <img src="C:\Users\HP\OneDrive\Desktop\friendsOfPlanetv2\images\download.png" alt="Friends Of Planet Uganda Logo">
+      <h3>Friends Of Planet Uganda</h3>
+    </div>
+    <nav class="nav-menu" id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="#">Create Account</a>
+      <a href="#">Login</a>
+    </nav>
+    <button class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Our Projects</h1>
+    <p>Making a tangible impact on environmental sustainability through dedicated initiatives</p>
+  </div>
+</section>
+
+<div class="projects-container">
+  <div class="project">
+    <h3>Tree Planting Campaign</h3>
+    <p>Tree planting activities in local communities.</p>
+    <p>Planting trees encourages the process of restoring forests and promoting natural regeneration in areas that have lost tree cover due to different factors like human activities and natural disturbances.</p>
+    <p>As FOP-Uganda, it's not only about restoring the lost tree cover, but we also aim at establishing new green spaces in areas where they previously never existed but are very important for capturing carbon, cleaning air, reducing urban temperature, creating green spaces, habitat creation, and ecological balance.</p>
+    
+    <h>What Can We Do</h>
+    <p>As FOP-Uganda we mobilize and encourage people of all races, backgrounds and ages to work together in solidarity for just climate actions that speed the global transition from dirty energy sources like burning fossil fuels, coal and firewood that emit thousands of tons of greenhouse gases into the atmosphere to clean renewables energy like solar power and biofuels. This would help to reduce the rate at which trees are being cut down for charcoal burning and other sources of energy for both domestic and industrial use.</p>
+    <p>We also interact with the communities on environment related matters and encourage them to engage in tree planting activities by providing them with saplings that can survive even under harsh weather conditions and have high carbon capturing ability.</p>
+    
+    <h>Why Plant Trees</h>
+    <p>Trees play a very significant role in our environment as well as our climate system. Trees filter the water we drink, clean the air we breathe and provide habitat for over 60% of the world's terrestrial organisms, sources of raw materials for pharmaceutical companies, and forests have provided thousands of jobs to people.</p>
+
+    <h>How Trees Are Important to the Environment</h>
+    
+    <h>Climate</h>
+    <p>Trees help cool the planet by absorbing and storing harmful greenhouse gases like carbon dioxide into their stems, branches and leaves and releasing oxygen back into the air. Trees can reduce urban heat by up to 8° Celsius with more than 45% of the world's population living in urban areas.</p>
+    <p>Fortunately, a mature tree can absorb an average of 1000kgs of carbon dioxide per year making urban areas a safe and good place to live.</p>
+    
+    <h>Biodiversity</h>
+    <p>A single tree can be a habitat for so many species of birds, mammals, and insects depending on the kind of food and home they are attracted to.</p>
+    <p>Without trees, forest dwellers would lack a place where to call home, but with large trees, a complex canopy, thick vegetation and old forests provide habitat for an array of animals, birds and insects.</p>
+    
+    <h>Air We Breathe</h>
+    <p>Trees help to clean the air we breathe from harmful pollutants released in the atmosphere by human activities. Leaves and bark absorb GHG in the atmosphere and release clean oxygen for us to breathe. In urban areas, environments trees sweep up particles like dust and smoke creating a safe atmosphere.</p>
+    
+    <h>Water Safety</h>
+    <p>Trees planted along and around water like rivers and lakes help in filtering water, absorbing water pollutants like nitrogen, phosphate and pesticides from runoff water before they reach water sources making it safe and clean for both humans and animals.</p>
+    <p>Trees when planted on a large scale create a canopy that limits sun's heat from directly reaching the ground and this keeps it cool and wet by preventing water loss.</p>
+    
+    <h>Land Protection</h>
+    <p>Planting trees helps combat desertification by releasing water vapor that influences rainfall patterns and promotes resilient water systems.</p>
+    <p>Tree roots help bind soil particles together and prevent it from being washed away by running water or winds. Areas with little or no vegetation cover face huge problems of erosion leaving behind degraded land.</p>
+  </div>
+
+  <div class="project">
+    <h3>Waste Management</h3>
+    <p>Plastic collection and recycling programs.</p>
+    <p>Our waste management initiatives focus on reducing environmental pollution through comprehensive recycling programs, community education, and sustainable waste disposal methods. We work with local communities to implement effective waste segregation systems and promote the circular economy concept.</p>
+    <p>Through partnerships with recycling facilities and environmental organizations, we ensure that collected waste materials are properly processed and repurposed, reducing the amount of waste that ends up in landfills or natural environments.</p>
+  </div>
+
+  <a href="index.html" class="back-button">⬅ Back to Home</a>
+</div>
+
+<footer>
+  <p>© 2025 FOP-Uganda | Together for a Greener World | Privacy Policy</p>
+</footer>
+
+<script>
+  // Sticky Header with Scroll Effect
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('header');
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+
+  // Enhanced Navigation Menu
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+  
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  
+  // Close menu when clicking on a link
+  document.querySelectorAll('.nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('active');
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+</html>
